@@ -1,0 +1,24 @@
+{
+    "name": "huizluo/atom",
+    "description": "this is simple php web framework",
+    "type": "library",
+    "require": {
+        "nikic/fast-route": "^1.3.0",
+        "psr/container": "^1.0",
+        "psr/http-message": "^1.0",
+        "php-di/php-di": "^6.0.0"
+    },
+    "authors": [
+        {
+            "name": "lazar",
+            "email": "jaekll@126.com"
+        }
+    ],
+    "autoload":{
+        "psr-4":{
+            "app\\":"app/",
+            "moon\\":"src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
