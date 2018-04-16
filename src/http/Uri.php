@@ -151,12 +151,6 @@ class Uri implements UriInterface{
         );
     }
 
-
-    public function getBasePath()
-    {
-
-    }
-
     /**
      * Set base path.
      *
@@ -217,27 +211,36 @@ class Uri implements UriInterface{
 
     public function getPort()
     {
-        // TODO: Implement getPort() method.
+        return $this->port;
     }
 
     public function getPath()
     {
-        // TODO: Implement getPath() method.
+        return $this->path;
+    }
+
+    public function getBasePath()
+    {
+        return $this->basePath;
     }
 
     public function getQuery()
     {
-        // TODO: Implement getQuery() method.
+       return $this->query;
     }
 
     public function getFragment()
     {
-        // TODO: Implement getFragment() method.
+        return $this->fragment;
     }
 
     public function withScheme($scheme)
     {
-        // TODO: Implement withScheme() method.
+        $scheme = $this->validateScheme($scheme);
+        $clone = clone $this;
+        $clone->scheme = $scheme;
+
+        return $clone;
     }
 
     public function withUserInfo($user, $password = null)
@@ -252,27 +255,101 @@ class Uri implements UriInterface{
 
     public function withPort($port)
     {
-        // TODO: Implement withPort() method.
+        $port = $this->validatePort($port);
+        $clone = clone $this;
+        $clone->port = $port;
+
+        return $clone;
     }
 
     public function withPath($path)
     {
-        // TODO: Implement withPath() method.
+        if (!is_string($path)) {
+            throw new \InvalidArgumentException('Uri path must be a string');
+        }
+
+        $clone = clone $this;
+        $clone->path = $this->filterPath($path);
+
+        // if the path is absolute, then clear basePath
+        if (substr($path, 0, 1) == '/') {
+            $clone->basePath = '';
+        }
+
+        return $clone;
+    }
+
+    public function withBaePath($basePath){
+        if (!is_string($basePath)) {
+            throw new \InvalidArgumentException('Uri path must be a string');
+        }
+        if (!empty($basePath)) {
+            $basePath = '/' . trim($basePath, '/'); // <-- Trim on both sides
+        }
+        $clone = clone $this;
+
+        if ($basePath !== '/') {
+            $clone->basePath = $this->filterPath($basePath);
+        }
+
+        return $clone;
+    }
+
+    public function getBaseUrl()
+    {
+        $scheme = $this->getScheme();
+        $authority = $this->getAuthority();
+        $basePath = $this->getBasePath();
+
+        if ($authority && substr($basePath, 0, 1) !== '/') {
+            $basePath = $basePath . '/' . $basePath;
+        }
+
+        return ($scheme ? $scheme . ':' : '')
+            . ($authority ? '//' . $authority : '')
+            . rtrim($basePath, '/');
     }
 
     public function withQuery($query)
     {
-        // TODO: Implement withQuery() method.
+        if (!is_string($query) && !method_exists($query, '__toString')) {
+            throw new \InvalidArgumentException('Uri query must be a string');
+        }
+        $query = ltrim((string)$query, '?');
+        $clone = clone $this;
+        $clone->query = $this->filterQuery($query);
+
+        return $clone;
     }
 
     public function withFragment($fragment)
     {
-        // TODO: Implement withFragment() method.
+        if (!is_string($fragment) && !method_exists($fragment, '__toString')) {
+            throw new \InvalidArgumentException('Uri fragment must be a string');
+        }
+        $fragment = ltrim((string)$fragment, '#');
+        $clone = clone $this;
+        $clone->fragment = $this->filterQuery($fragment);
+
+        return $clone;
     }
 
     public function __toString()
     {
-        return $this->path;
+        $scheme = $this->getScheme();
+        $authority = $this->getAuthority();
+        $basePath = $this->getBasePath();
+        $path = $this->getPath();
+        $query = $this->getQuery();
+        $fragment = $this->getFragment();
+
+        $path = $basePath . '/' . ltrim($path, '/');
+
+        return ($scheme ? $scheme . ':' : '')
+            . ($authority ? '//' . $authority : '')
+            . $path
+            . ($query ? '?' . $query : '')
+            . ($fragment ? '#' . $fragment : '');
     }
 
     /**

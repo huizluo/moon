@@ -19,7 +19,27 @@ class MoonException extends \Exception{
     public function __construct(ServerRequestInterface $request,ResponseInterface $response)
     {
         $this->request = $request;
-        $this->request = $response;
+        $this->response = $response;
         parent::__construct();
+    }
+
+    /**
+     * Get request
+     *
+     * @return ServerRequestInterface
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+     * Get response
+     *
+     * @return ResponseInterface
+     */
+    public function getResponse()
+    {
+        return $this->response;
     }
 }

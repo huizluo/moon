@@ -23,7 +23,10 @@ interface RouteGroupInterface{
      * @param callable|string $callable
      * @return RouteGroupInterface
      * */
-    public function add($callable);
+    public function addMiddleware($callable);
 
+    /*
+     * invoke route group's callable
+     * */
     public function __invoke(App $app);
 }

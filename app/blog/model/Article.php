@@ -4,7 +4,8 @@ namespace app\blog\model;
  *
  */
 
-class Article implements \JsonSerializable {
+class Article {
+
     private $id;
     private $title;
     private $content;
@@ -32,13 +33,13 @@ class Article implements \JsonSerializable {
         return $this->content;
     }
 
-    function jsonSerialize()
+    function toArray()
     {
         $tmp['id'] = $this->id;
         $tmp['title'] = $this->title;
         $tmp['content'] = $this->content;
 
-        return json_encode($tmp);
+        return $tmp;
     }
 
 

@@ -42,6 +42,12 @@ abstract class Message implements MessageInterface{
         return $this->protocolVersion;
     }
 
+    /***
+     * create a new instance
+     *
+     * @param string $version
+     * @return MessageInterface
+     * */
     public function withProtocolVersion($version)
     {
         if(!isset(self::$validProtocolVersions[$version])){

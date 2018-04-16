@@ -17,11 +17,17 @@ class ArticleData{
         ];
     }
 
+    /**
+     * @return Article[]
+     * */
     public function getArticles()
     {
         return $this->articles;
     }
-
+    /**
+     * @param int $id
+     * @return Article
+     * */
     public function getArticle($id)
     {
         return $this->articles[$id];

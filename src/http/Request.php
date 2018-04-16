@@ -150,7 +150,6 @@ class Request extends Message implements ServerRequestInterface {
         $this->cookies = $cookies;
         $this->uploadedFiles = $uploadFiles;
         $this->queryParams = $this->getQueryParams();
-        $this->attributes = $this->getAttributes();
 
 
 
@@ -670,7 +669,7 @@ class Request extends Message implements ServerRequestInterface {
     public function withAttributes(array $attributes)
     {
         $new = clone $this;
-        $new->attributes->replace($attributes);
+        $new->attributes = new Collection($attributes);
         return $new;
     }
 

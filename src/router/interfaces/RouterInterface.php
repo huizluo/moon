@@ -22,7 +22,7 @@ interface RouterInterface {
      *
      * @return RouterInterface
      * */
-    public function match($method,$pattern,callable $callable);
+    public function match($method,$pattern,$callable);
 
     /**
      * dispatch router for http request

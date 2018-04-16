@@ -117,9 +117,7 @@ class Response extends Message implements ResponseInterface {
 
     public function __clone()
     {
-        $this->statusCode = clone $this->statusCode;
         $this->headers = clone $this->headers;
-        $this->body = clone $this->body;
     }
 
     protected function validateCode($code){
@@ -177,6 +175,26 @@ class Response extends Message implements ResponseInterface {
 
         return $new;
 
+    }
+
+    /***
+     * create a new instance
+     *
+     * @param string $version
+     * @return ResponseInterface
+     * */
+    public function withProtocolVersion($version)
+    {
+        if(!isset(self::$validProtocolVersions[$version])){
+            throw new \InvalidArgumentException(
+                'Invalid HTTP version. Must be one of: '
+                . implode(', ', array_keys(self::$validProtocolVersions))
+            );
+        }
+
+        $new = clone $this;
+        $new->protocolVersion = $version;
+        return $new;
     }
 
     public function getReasonPhrase()

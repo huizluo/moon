@@ -14,6 +14,9 @@ use Psr\Http\Message\ResponseInterface;
 
 
 interface RouteInterface{
+
+    public function getId();
+
     /**
      * Retrieve a specific route argument
      *
